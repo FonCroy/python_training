@@ -52,10 +52,6 @@ class AddContact(unittest.TestCase):
         wd.find_element_by_name("email").click()
         wd.find_element_by_name("email").clear()
         wd.find_element_by_name("email").send_keys(contact.email)
-        if not wd.find_element_by_xpath(contact.day_of_birth).is_selected():
-            wd.find_element_by_xpath(contact.day_of_birth).click()
-        if not wd.find_element_by_xpath(contact.month_of_birth).is_selected():
-            wd.find_element_by_xpath(contact.month_of_birth).click()
         wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").clear()
         wd.find_element_by_name("byear").send_keys(contact.year_of_birth)
@@ -74,8 +70,6 @@ class AddContact(unittest.TestCase):
         self.login(wd, username="admin", password="secret")
         self.add_new_contact(wd, Contact(first_name="First", middle_name="Middle", last_name="Last", nickname="FML",
                                          company="Test Inc.", mobile_phone="+79205894179", email="test@gmail.com",
-                                         day_of_birth="//div[@id='content']/form/select[1]//option[12]",
-                                         month_of_birth="//div[@id='content']/form/select[2]//option[5]",
                                          year_of_birth="1978"))
         self.return_to_home_page(wd)
         self.logout(wd)
@@ -85,9 +79,7 @@ class AddContact(unittest.TestCase):
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.add_new_contact(wd, Contact(first_name="", middle_name="", last_name="", nickname="",
-                                         company="", mobile_phone="", email="",
-                                         day_of_birth="//div[@id='content']/form/select[1]",
-                                         month_of_birth="//div[@id='content']/form/select[2]", year_of_birth=""))
+                                         company="", mobile_phone="", email="", year_of_birth=""))
         self.return_to_home_page(wd)
         self.logout(wd)
 
