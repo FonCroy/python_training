@@ -5,10 +5,19 @@ class ContactHelper:
         self.app = app
 
     def create(self, contact):
+        """Добавление контакта"""
         wd = self.app.wd
         # init new contact creation
         wd.find_element_by_link_text("add new").click()
         # fill new contact information
+        self.fill_contact_form(contact)
+        # submit new contact
+        wd.find_element_by_name("submit").click()
+        self.return_to_home_page()
+
+    def fill_contact_form(self, contact):
+        """Заполенение полей на форме контакта"""
+        wd = self.app.wd
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
         wd.find_element_by_name("firstname").send_keys(contact.first_name)
@@ -33,10 +42,34 @@ class ContactHelper:
         wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").clear()
         wd.find_element_by_name("byear").send_keys(contact.year_of_birth)
-        # submit new contact
-        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+
+    def delete_contact_by_index_from_home_page(self, index):
+        """Удаление сотрудника по порядковому номеру в таблице ( на домашней странице )"""
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
+        wd.find_element_by_css_selector("input[value='Delete']").click()
+        wd.switch_to_alert().accept()
+
+    def delete_contact_by_index_from_contact_form(self, index):
+        """Удаление сотрудника по порядковому номеру в таблице ( из его карточки )"""
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        wd.find_element_by_css_selector("input[value='Delete']").click()
+
+    def open_contact_to_edit_by_index(self, index):
+        """Открыть для редактирования карточку сотрудника по порядковому номеру в таблице"""
+        wd = self.app.wd
+        wd.find_elements_by_css_selector('a[href^="edit.php?id="]')[index].click()
+
+    def edit_contact_by_index(self, contact, index):
+        """Редактирование карточки сотрудника по порядковому номеру в таблице"""
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        self.fill_contact_form(contact)
+        wd.find_element_by_css_selector("input[value='Update']").click()
         self.return_to_home_page()
 
     def return_to_home_page(self):
+        """Возвращение на домашнюю страницу"""
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
