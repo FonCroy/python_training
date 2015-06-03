@@ -46,6 +46,7 @@ class ContactHelper:
     def delete_contact_by_index_from_home_page(self, index):
         """Удаление сотрудника по порядковому номеру в таблице ( на домашней странице )"""
         wd = self.app.wd
+        self.app.open_home_page()
         wd.find_elements_by_name("selected[]")[index].click()
         wd.find_element_by_css_selector("input[value='Delete']").click()
         wd.switch_to_alert().accept()
@@ -59,6 +60,7 @@ class ContactHelper:
     def open_contact_to_edit_by_index(self, index):
         """Открыть для редактирования карточку сотрудника по порядковому номеру в таблице"""
         wd = self.app.wd
+        self.app.open_home_page()
         wd.find_elements_by_css_selector('a[href^="edit.php?id="]')[index].click()
 
     def edit_contact_by_index(self, contact, index):
