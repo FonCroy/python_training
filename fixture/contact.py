@@ -8,7 +8,7 @@ class ContactHelper:
         """Добавление контакта"""
         wd = self.app.wd
         # init new contact creation
-        wd.find_element_by_link_text("add new").click()
+        wd.find_element_by_css_selector("a[href='edit.php']").click()
         # fill new contact information
         self.fill_contact_form(contact)
         # submit new contact
@@ -70,4 +70,5 @@ class ContactHelper:
     def return_to_home_page(self):
         """Возвращение на домашнюю страницу"""
         wd = self.app.wd
-        wd.find_element_by_link_text("home page").click()
+        if not wd.current_url.endswith("/addressbook/"):
+            wd.find_element_by_css_selector("a[href='./']").click()
