@@ -27,6 +27,7 @@ class GroupHelper:
         wd.find_element_by_link_text("group page").click()
 
     def change_field_value(self, field_name, input_text):
+        """Изменить значение поля"""
         wd = self.app.wd
         if input_text is not None:
             wd.find_element_by_name(field_name).click()
@@ -46,6 +47,12 @@ class GroupHelper:
         wd.find_elements_by_name("selected[]")[index].click()
         wd.find_element_by_name("delete").click()
         self.return_to_groups_page()
+
+    def count(self):
+        """Возвращение количества записей в списке групп"""
+        wd = self.app.wd
+        self.open_groups_page()
+        return len(wd.find_elements_by_name("selected[]"))
 
     def edit_group_by_index(self, group, index):
         """Редактировать группу по порядковому номеру в таблице"""
