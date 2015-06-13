@@ -23,6 +23,7 @@ class GroupHelper:
         # submit group creation
         wd.find_element_by_name("submit").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
     def return_to_groups_page(self):
         """Возвращение на страницу групп"""
@@ -51,6 +52,7 @@ class GroupHelper:
         wd.find_elements_by_name("selected[]")[index].click()
         wd.find_element_by_name("delete").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
     def count(self):
         """Возвращение количества записей в списке групп"""
@@ -69,13 +71,17 @@ class GroupHelper:
         # submit group creation
         wd.find_element_by_name("update").click()
         self.return_to_groups_page()
+        self.group_cache = None
+
+    group_cache = None
 
     def get_group_list(self):
-        wd = self.app.wd
-        self.open_groups_page()
-        groups = []
-        for element in wd.find_elements_by_css_selector("span.group"):
-            text = element.text
-            value = element.find_element_by_name("selected[]").get_attribute("value")
-            groups.append(Group(name=text, group_id=value))
-        return groups
+        if self.group_cache is None:
+            wd = self.app.wd
+            self.open_groups_page()
+            self.group_cache = []
+            for element in wd.find_elements_by_css_selector("span.group"):
+                text = element.text
+                value = element.find_element_by_name("selected[]").get_attribute("value")
+                self.group_cache.append(Group(name=text, group_id=value))
+        return list(self.group_cache)
