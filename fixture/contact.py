@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from model.contact import Contact
+
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -72,3 +75,14 @@ class ContactHelper:
         wd = self.app.wd
         if not wd.current_url.endswith("/addressbook/"):
             wd.find_element_by_css_selector("a[href='./']").click()
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.app.open_home_page()
+        contacts = []
+        for element in wd.find_elements_by_css_selector("tr[name=entry]"):
+            last_name = element.find_element_by_css_selector("td:nth-child(2)").text
+            first_name = element.find_element_by_css_selector("td:nth-child(3)").text
+            value = element.find_element_by_name("selected[]").get_attribute("value")
+            contacts.append(Contact(first_name=first_name, last_name=last_name, contact_id=value))
+        return contacts
