@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
+import pytest
+import random
+import string
 from model.group import Group
 
 
-def test_add_group(app):
-    old_groups = app.group.get_group_list()
-    group = Group(name="Name1", header="Header1", footer="Footer1")
-    app.group.create(group)
-    assert len(old_groups) + 1 == app.group.count()
-    new_groups = app.group.get_group_list()
-    old_groups.append(group)
-    assert sorted(old_groups, key=Group.id_or_max) == sorted(new_groups, key=Group.id_or_max)
+def random_string(prefix, max_len):
+    symbol = string.ascii_letters + string.digits + string.punctuation + " "*10
+    return prefix + "".join([random.choice(symbol) for i in range(random.randrange(max_len))])
 
 
-def test_add_empty_group(app):
+test_data = [Group("", "", "")] + \
+            [Group(random_string("name", 10), random_string("header", 20), random_string("footer", 20))
+             for i in range(5)
+             ]
+
+
+@pytest.mark.parametrize("group", test_data, ids=[repr(i) for i in test_data])
+def test_add_group(app, group):
     old_groups = app.group.get_group_list()
-    group = Group(name="", header="", footer="")
     app.group.create(group)
     assert len(old_groups) + 1 == app.group.count()
     new_groups = app.group.get_group_list()

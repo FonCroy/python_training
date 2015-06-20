@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from selenium.webdriver.support.select import Select
 from model.contact import Contact
 import re
 
@@ -20,23 +21,45 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_cache = None
 
-    def change_fill_value(self, field_name, input_text):
+    def change_field_value(self, field_name, input_text):
         wd = self.app.wd
         if input_text is not None:
             wd.find_element_by_name(field_name).click()
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(input_text)
 
+    def change_select_value(self, field_name, input_text):
+        wd = self.app.wd
+        if input_text is not None:
+            select = Select(wd.find_element_by_name(field_name))
+            select.select_by_value(input_text)
+
     def fill_contact_form(self, contact):
         """Заполенение полей на форме контакта"""
-        self.change_fill_value("firstname", contact.first_name)
-        self.change_fill_value("middlename", contact.middle_name)
-        self.change_fill_value("lastname", contact.last_name)
-        self.change_fill_value("nickname", contact.nickname)
-        self.change_fill_value("company", contact.company)
-        self.change_fill_value("mobile", contact.mobile_phone)
-        self.change_fill_value("email", contact.email)
-        self.change_fill_value("byear", contact.year_of_birth)
+        self.change_field_value("firstname", contact.first_name)
+        self.change_field_value("middlename", contact.middle_name)
+        self.change_field_value("lastname", contact.last_name)
+        self.change_field_value("nickname", contact.nickname)
+        self.change_field_value("title", contact.title)
+        self.change_field_value("company", contact.company)
+        self.change_field_value("address", contact.address)
+        self.change_field_value("home", contact.home_phone)
+        self.change_field_value("mobile", contact.mobile_phone)
+        self.change_field_value("work", contact.work_phone)
+        self.change_field_value("fax", contact.fax)
+        self.change_field_value("email", contact.email)
+        self.change_field_value("email2", contact.email2)
+        self.change_field_value("email3", contact.email3)
+        self.change_field_value("homepage", contact.homepage)
+        self.change_select_value('bday', contact.day_of_birth)
+        self.change_select_value('bmonth', contact.month_of_birth)
+        self.change_field_value("byear", contact.year_of_birth)
+        self.change_select_value('aday', contact.day_of_anniversary)
+        self.change_select_value('amonth', contact.month_of_anniversary)
+        self.change_field_value("ayear", contact.year_of_anniversary)
+        self.change_field_value("address2", contact.address2)
+        self.change_field_value("phone2", contact.phone2)
+        self.change_field_value("notes", contact.notes)
 
     def delete_contact_by_index_from_home_page(self, index):
         """Удаление сотрудника по порядковому номеру в таблице ( на домашней странице )"""
