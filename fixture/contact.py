@@ -70,10 +70,26 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         self.contact_cache = None
 
+    def delete_contact_by_id_from_home_page(self, id):
+        """Удаление сотрудника по id ( на домашней странице )"""
+        wd = self.app.wd
+        self.app.open_home_page()
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        wd.find_element_by_css_selector("input[value='Delete']").click()
+        wd.switch_to_alert().accept()
+        self.contact_cache = None
+
     def delete_contact_by_index_from_contact_form(self, index):
         """Удаление сотрудника по порядковому номеру в таблице ( из его карточки )"""
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
+        wd.find_element_by_css_selector("input[value='Delete']").click()
+        self.contact_cache = None
+
+    def delete_contact_by_id_from_contact_form(self, id):
+        """Удаление сотрудника по id ( из его карточки )"""
+        wd = self.app.wd
+        self.open_contact_to_edit_by_id(id)
         wd.find_element_by_css_selector("input[value='Delete']").click()
         self.contact_cache = None
 
@@ -82,6 +98,12 @@ class ContactHelper:
         wd = self.app.wd
         self.app.open_home_page()
         wd.find_elements_by_css_selector('a[href^="edit.php?id="]')[index].click()
+
+    def open_contact_to_edit_by_id(self, id):
+        """Открыть для редактирования карточку сотрудника по id"""
+        wd = self.app.wd
+        self.app.open_home_page()
+        wd.find_element_by_css_selector('a[href^="edit.php?id=%s"]' % id).click()
 
     def open_contact_to_view_by_index(self, index):
         """Открыть для просмотра карточку сотрудника по порядковому номеру в таблице"""
@@ -93,6 +115,15 @@ class ContactHelper:
         """Редактирование карточки сотрудника по порядковому номеру в таблице"""
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
+        self.fill_contact_form(contact)
+        wd.find_element_by_css_selector("input[value='Update']").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
+    def edit_contact_by_id(self, contact, id):
+        """Редактирование карточки сотрудника по id"""
+        wd = self.app.wd
+        self.open_contact_to_edit_by_id(id)
         self.fill_contact_form(contact)
         wd.find_element_by_css_selector("input[value='Update']").click()
         self.return_to_home_page()
