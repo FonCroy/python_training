@@ -42,8 +42,12 @@ class Contact:
 
     def __eq__(self, other):
         return (self.contact_id is None or other.contact_id is None or self.contact_id == other.contact_id) \
-               and ' '.join(self.first_name.split()) == ' '.join(other.first_name.split()) \
-               and ' '.join(self.last_name.split()) == ' '.join(other.last_name.split())
+               and self.first_name == other.first_name and self.last_name == other.last_name \
+               and (self.address is None or other.address is None or self.address == other.address) \
+               and (self.all_phones_from_home_page is None or other.all_phones_from_home_page is None or
+                    self.all_phones_from_home_page == other.all_phones_from_home_page)\
+               and (self.all_emails_from_home_page is None or other.all_emails_from_home_page is None or
+                    self.all_emails_from_home_page == other.all_emails_from_home_page)
 
     def id_or_max(self):
         if self.contact_id:
