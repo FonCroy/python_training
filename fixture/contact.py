@@ -61,6 +61,28 @@ class ContactHelper:
         self.change_field_value("phone2", contact.phone2)
         self.change_field_value("notes", contact.notes)
 
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[id='%s']" % id).click()
+
+    def add_contact_to_group(self, contact, group):
+        wd = self.app.wd
+        self.app.open_home_page()
+        self.select_contact_by_id(contact.contact_id)
+        wd.find_element_by_xpath("//select[@name='to_group']/option[. = '%s']" % group.name).click()
+        wd.find_element_by_name("add").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
+    def delete_contact_from_group(self, contact, group):
+        wd = self.app.wd
+        self.app.open_home_page()
+        wd.find_element_by_xpath("//select[@name='group']/option[. = '%s']" % group.name).click()
+        self.select_contact_by_id(contact.contact_id)
+        wd.find_element_by_name("remove").click()
+        self.app.open_home_page()
+        self.contact_cache = None
+
     def delete_contact_by_index_from_home_page(self, index):
         """Удаление сотрудника по порядковому номеру в таблице ( на домашней странице )"""
         wd = self.app.wd
@@ -74,7 +96,7 @@ class ContactHelper:
         """Удаление сотрудника по id ( на домашней странице )"""
         wd = self.app.wd
         self.app.open_home_page()
-        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        self.select_contact_by_id(id)
         wd.find_element_by_css_selector("input[value='Delete']").click()
         wd.switch_to_alert().accept()
         self.contact_cache = None
